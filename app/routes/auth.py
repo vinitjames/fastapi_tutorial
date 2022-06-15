@@ -11,13 +11,12 @@ router = APIRouter(tags=["Authentication"])
 def login(user_credentials: OAuth2PasswordRequestForm=Depends(), db: Session=Depends(database.get_db)):
     user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"Invaild user credentials")
     if not crypto.verify_password(user_credentials.password, user.password):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"Invaild user credentials")
     access_token = oauth2.create_access_token(data = schemas.UserAuthTokenData(user_id = user.id))
-    oauth2.verify_access_token(access_token, HTTPException(status_code=status.HTTP_401_UNAUTHORIZED))
     return {"access_token":access_token, "token_type":"bearer"}
 
 
