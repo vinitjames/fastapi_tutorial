@@ -46,3 +46,7 @@ class UserAuthToken(BaseModel):
 class UserAuthTokenData(BaseModel):
     user_id: str
     exp: Optional[datetime] = None
+
+class UserData(BaseModel):
+    id: str
+    email: EmailStr
