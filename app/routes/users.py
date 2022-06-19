@@ -1,14 +1,15 @@
 from fastapi import HTTPException, status, Response, Depends, APIRouter
 from typing import List
-from .. import models, schemas, crypto
+from .. import models, crypto
+from ..schemas.user import UserResponse, UserCreate 
 from ..database import get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/users",
                    tags=["Users"])
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse)
-def create_user(user: schemas.UserCreate, db: Session=Depends(get_db)) -> dict:
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
+def create_user(user: UserCreate, db: Session=Depends(get_db)) -> dict:
   user.password = crypto.hash(user.password)
   new_user = models.User(**user.dict())
   db.add(new_user)
@@ -16,7 +17,7 @@ def create_user(user: schemas.UserCreate, db: Session=Depends(get_db)) -> dict:
   db.refresh(new_user)
   return new_user
 
-@router.get("/{id}",response_model=schemas.UserResponse)
+@router.get("/{id}",response_model=UserResponse)
 def get_users(id: int, db: Session=Depends(get_db)) -> dict:
   user = db.query(models.User).filter(models.User.id == id).first()
   if user is None:
