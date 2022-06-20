@@ -12,8 +12,11 @@ router = APIRouter(prefix="/post",
 
 @router.get("/", response_model=List[PostResponse])
 def get_posts(db: Session=Depends(get_db),
-              current_user: UserData = Depends(oauth2.get_current_user)) -> dict:
-  posts = db.query(models.Post).filter(models.Post.owner_id == current_user.id).all()
+              current_user: UserData = Depends(oauth2.get_current_user),
+              limit: int=10, skip: int=0) -> dict:
+  posts = db.query(models.Post).filter(
+    models.Post.owner_id == current_user.id
+  ).limit(limit).offset(skip).all()
   return posts
 
 @router.get("/{id}", response_model=PostResponse)
