@@ -16,10 +16,18 @@ class PostUpdate(PostBase):
     published: bool = True
 
 
-class PostResponse(PostBase):
+class PostResp(PostBase):
     id: int
     created_at: datetime
     owner: UserData
     
     class Config:
         orm_mode = True
+
+class PostWithVoteResp(BaseModel):
+    Post: PostResp
+    votes: int
+    
+    class Config:
+        orm_mode = True
+    
