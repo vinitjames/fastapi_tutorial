@@ -6,7 +6,7 @@ from .config import db_config
 SQL_DATABASE_URI = f'postgresql://{db_config.postgres_username}:{db_config.postgres_password}@{db_config.postgres_hostname}:{db_config.postgres_port}/{db_config.postgres_dbname}'
 
 
-#engine = create_engine(SQL_DATABASE_URI)
+engine = create_engine(SQL_DATABASE_URI)
 
 sessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
 
