@@ -7,7 +7,7 @@ from ..schemas.user import UserData
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-router = APIRouter(prefix="/post",
+router = APIRouter(prefix="/posts",
                    tags=["Posts"] )
 
 

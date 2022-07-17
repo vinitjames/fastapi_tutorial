@@ -1,35 +1,5 @@
-from fastapi.testclient import TestClient
-from app.main import app
-import pytest
-from app.config import db_config
-from app import models
+
 from app.schemas.user import UserResponse
-from app.database import get_db
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-SQL_TEST_DATABASE_URI = f'postgresql://{db_config.postgres_username}:{db_config.postgres_password}@{db_config.postgres_hostname}:{db_config.postgres_port}/{db_config.postgres_dbname}_test'
-
-
-test_engine = create_engine(SQL_TEST_DATABASE_URI)
-
-TestSessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=test_engine)
-
-def override_get_db():
-    db = TestSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-    
-@pytest.fixture
-def client():
-    models.base.metadata.drop_all(bind=test_engine)
-    models.base.metadata.create_all(bind=test_engine)
-    app.dependency_overrides[get_db] = override_get_db
-    return TestClient(app)
-    
-
 
 def test_create_user(client):
     email = "test@test.com"
@@ -39,4 +9,19 @@ def test_create_user(client):
     assert res.status_code == 201
     assert new_test_user.email == email
     assert new_test_user.id == 1
+
+    
+def test_get_user(client, test_user):
+    res = client.get("/users/{}".format(test_user["id"]))
+    assert res.status_code == 200
+    user = UserResponse(**res.json())
+    assert user.id == test_user["id"]
+    assert user.email == test_user["email"]
+
+    
+def test_get_nonexistent_user(client):
+    res = client.get("/users/99999")
+    assert res.status_code == 404
+    
+
 
