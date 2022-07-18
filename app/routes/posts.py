@@ -22,7 +22,8 @@ def get_posts(db: Session=Depends(get_db),
   return posts
 
 @router.get("/{id}", response_model=PostWithVoteResp)
-def get_post(id: int, db: Session=Depends(get_db)) -> dict:
+def get_post(id: int, db: Session=Depends(get_db),
+             current_user: UserData = Depends(oauth2.get_current_user)) -> dict:
   post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
     models.Vote, models.Vote.post_id == models.Post.id, isouter=True
   ).group_by(models.Post.id).filter(models.Post.id == id).first()
