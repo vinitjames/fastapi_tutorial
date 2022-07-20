@@ -17,13 +17,13 @@ jobs:
       JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
       JWT_ALGORITHM: ${{secrets.JWT_ALGORITHM}}
       JWT_TIMEOUT: ${{secrets.JWT_TIMEOUT}}
-	services:
+    services:
       postgres:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
           POSTGRES_DB: ${{secrets.POSTGRES_DBNAME}}_test
-		ports:
+        ports:
         - 5432:5432
         options: >-
           --health-cmd pg_isready
