@@ -9,14 +9,14 @@ jobs:
     environment:
       name: Testing
     env:
-      POSTGRES_USERNAME = ${{secrets.POSTGRES_USERNAME}}
-      POSTGRES_HOSTNAME = ${{secrets.POSTGRES_HOSTNAME}}
-      POSTGRES_PORT = ${{secrets.POSTGRES_PORT}}
-      POSTGRES_PASSWORD = ${{secrets.POSTGRES_PASSWORD}}
-      POSTGRES_DBNAME = ${{secrets.POSTGRES_DBNAME}}
-      JWT_SECRET_KEY = ${{secrets.JWT_SECRET_KEY}}
-      JWT_ALGORITHM = ${{secrets.JWT_ALGORITHM}}
-      JWT_TIMEOUT = ${{secrets.JWT_TIMEOUT}}
+      POSTGRES_USERNAME: ${{secrets.POSTGRES_USERNAME}}
+      POSTGRES_HOSTNAME: ${{secrets.POSTGRES_HOSTNAME}}
+      POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      POSTGRES_DBNAME: ${{secrets.POSTGRES_DBNAME}}
+      JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
+      JWT_ALGORITHM: ${{secrets.JWT_ALGORITHM}}
+      JWT_TIMEOUT: ${{secrets.JWT_TIMEOUT}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
